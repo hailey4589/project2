@@ -6,6 +6,8 @@ from keras import layers
 import matplotlib.pyplot as plt
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
+from numpy.random import seed
+seed(4)
 
 
 data_dir = "Data"
@@ -21,7 +23,7 @@ train_dataset = tf.keras.utils.image_dataset_from_directory(
     batch_size=32,
     image_size=(100, 100),
     shuffle=True,
-    seed=None,
+    seed=4,
     validation_split=None,
     subset=None,
     interpolation='bilinear',
@@ -38,7 +40,7 @@ validate_dataset = tf.keras.utils.image_dataset_from_directory(
     batch_size=32,
     image_size=(100, 100),
     shuffle=True,
-    seed=None,
+    seed=4,
     validation_split=None,
     subset=None,
     interpolation='bilinear',
@@ -54,7 +56,7 @@ for images, labels in train_dataset.take(1):
 data_augmentation_train = keras.Sequential(
     [
         layers.Rescaling(1./255),
-        layers.RandomZoom(0.3),
+        layers.RandomZoom((0.3), seed = 4),
     ]
 )
 
@@ -77,20 +79,20 @@ data_aug = ImageDataGenerator(
 )
 
 model = Sequential([
-  layers.Conv2D(3, 2,strides=(1, 1)),
+  layers.Conv2D(3, 2,strides=(1, 1),padding='same', activation='relu'),
   layers.MaxPooling2D(),
-  layers.Conv2D(4, 2, strides=(1, 1)),
+  layers.Conv2D(4, 2, strides=(1, 1),padding='same', activation='leaky_relu'),
   layers.MaxPooling2D(),
-  #layers.Conv2D(8, 2,  strides=(1, 1)),
-  #layers.MaxPooling2D(),
+  layers.Conv2D(8, 2,  strides=(1, 1)),
+  layers.MaxPooling2D(),
   layers.Flatten(),
   layers.Dense(128),
-  layers.Dense(4)
+  layers.Dense(4, activation = 'relu')
 ])
 
 model.compile(optimizer='adam',
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-              metrics=['accuracy'])
+              metrics=['accuracy'],)
 
 
 epochs=8
