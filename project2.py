@@ -56,7 +56,7 @@ for images, labels in train_dataset.take(1):
 data_augmentation_train = keras.Sequential(
     [
         layers.Rescaling(1./255),
-        layers.RandomZoom((0.3), seed = 4),
+        layers.RandomZoom((0.2), seed = 4),
     ]
 )
 
@@ -79,15 +79,15 @@ data_aug = ImageDataGenerator(
 )
 
 model = Sequential([
-  layers.Conv2D(3, 2,strides=(1, 1),padding='same', activation='relu'),
+  layers.Conv2D(2, 2,strides=(1, 1),padding='same', activation='relu'),
   layers.MaxPooling2D(),
-  layers.Conv2D(4, 2, strides=(1, 1),padding='same', activation='leaky_relu'),
+  layers.Conv2D(4, 2, strides=(1, 1),padding='same', activation='relu'),
   layers.MaxPooling2D(),
-  layers.Conv2D(8, 2,  strides=(1, 1)),
+  layers.Conv2D(6, 4,  strides=(1, 1),padding='same', activation='leaky_relu'),
   layers.MaxPooling2D(),
   layers.Flatten(),
-  layers.Dense(128),
-  layers.Dense(4, activation = 'relu')
+  layers.Dense(32, activation= 'relu'),
+  layers.Dense(4, activation = 'softmax')
 ])
 
 model.compile(optimizer='adam',
@@ -110,7 +110,7 @@ val_loss = history.history['val_loss']
 
 epochs_range = range(epochs)
 
-plt.figure(figsize=(8, 8))
+plt.figure(figsize=(12, 8))
 plt.subplot(1, 2, 1)
 plt.plot(epochs_range, acc, label='Training Accuracy')
 plt.plot(epochs_range, val_acc, label='Validation Accuracy')
