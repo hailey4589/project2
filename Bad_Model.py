@@ -87,14 +87,10 @@ data_aug = ImageDataGenerator(
     shear_range=0.2  # Adjust the shear range as needed
 )
 
-# GOOD MODEL 
+# BAD MODEL 
 
 model = Sequential([
   layers.Conv2D(2, 2,strides=(1, 1),padding='same', activation='relu', ),
-  layers.MaxPooling2D(),
-  layers.Conv2D(4, 4, strides=(1, 1),padding='same', activation='relu'),
-  layers.MaxPooling2D(),
-  layers.Conv2D(16, 4,  strides=(1, 1),padding='same', activation='relu'),
   layers.MaxPooling2D(),
   layers.Dropout(0.1),
   layers.Flatten(),
@@ -107,7 +103,7 @@ model.compile(optimizer='adam',
               metrics=['accuracy'],)
 
 
-epochs=15
+epochs=10
 history = model.fit(
   train_dataset,
   validation_data = validate_dataset,
@@ -135,23 +131,5 @@ plt.plot(epochs_range, val_loss, label='Validation Loss')
 plt.legend(loc='upper right')
 plt.title('Training and Validation Loss')
 plt.show()
-
-
-model.save('my_model.h5')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
